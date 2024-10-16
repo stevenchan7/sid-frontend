@@ -2,8 +2,7 @@
 
 import { getAnnouncement } from '@/api/announcement.api';
 import { useAnnouncementStore } from '@/stores/announcement.store';
-import { Box, HStack, Skeleton, Text, VStack } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
+import { Box, Skeleton, Text, VStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AnnouncementCard from './AnnouncementCard';
@@ -40,9 +39,7 @@ export default function AnnouncementList() {
 
 	async function getAnnouncements(page: number, limit: number, search: string) {
 		try {
-			const announcements = await getAnnouncement(page, limit, search);
-
-			console.log('PENGUMUMAN', announcements);
+			const announcements = await getAnnouncement({ page, limit, title: search });
 
 			if (page === 1) {
 				setAnnouncements(announcements);
@@ -53,7 +50,8 @@ export default function AnnouncementList() {
 			if (announcements.length < limit) {
 				setHasMore(false);
 			} else {
-				const announcements = await getAnnouncement(page + 1, limit, search);
+				// Cek apakah ada pengumuman selanjutnya
+				const announcements = await getAnnouncement({ page: page + 1, limit, title: search });
 
 				if (announcements.length === 0) {
 					setHasMore(false);
@@ -65,13 +63,10 @@ export default function AnnouncementList() {
 	}
 
 	useEffect(() => {
-		console.log('masuk scroll page ke ', page);
 		getAnnouncements(page, limit, search);
 	}, [page]);
 
 	useEffect(() => {
-		console.log('SEARCHH', search);
-
 		setPage(1);
 		setHasMore(true);
 		getAnnouncements(page, limit, search);

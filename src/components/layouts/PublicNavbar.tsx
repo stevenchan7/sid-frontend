@@ -1,6 +1,24 @@
 'use client';
 
-import { Avatar, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerOverlay, Flex, Image, Link, Menu, MenuButton, MenuDivider, MenuItem, MenuList, useDisclosure } from '@chakra-ui/react';
+import {
+	Avatar,
+	Box,
+	Button,
+	Drawer,
+	DrawerBody,
+	DrawerContent,
+	DrawerOverlay,
+	Flex,
+	Image,
+	Link,
+	Menu,
+	MenuButton,
+	MenuDivider,
+	MenuItem,
+	MenuList,
+	textDecoration,
+	useDisclosure,
+} from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
 import Hamburger from 'hamburger-react';
 import { useEffect, useState } from 'react';
@@ -79,7 +97,9 @@ export default function PublicNavbar() {
 									<Avatar size={'sm'} name={user.name} src={user.profile_url} />
 								</MenuButton>
 								<MenuList>
-									<MenuItem>Admin Area</MenuItem>
+									<Link href='/dashboard/home' _hover={{ textDecoration: 'none' }}>
+										<MenuItem>Admin Area</MenuItem>
+									</Link>
 									<MenuDivider />
 									<Logout />
 								</MenuList>

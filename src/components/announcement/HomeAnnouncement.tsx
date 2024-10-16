@@ -18,8 +18,8 @@ export default function HomeAnnouncement() {
 	const limit = 5;
 
 	const { data, isLoading } = useQuery({
-		queryKey: ['announcements', 5],
-		queryFn: () => getAnnouncement(page, limit, ''),
+		queryKey: ['announcements', 'home'],
+		queryFn: () => getAnnouncement({ page, limit }),
 	});
 
 	useEffect(() => {
@@ -42,7 +42,7 @@ export default function HomeAnnouncement() {
 				{announcements &&
 					announcements.length > 0 &&
 					announcements.map((announcement, index) => (
-						<Box w={'full'} onClick={() => router.replace('/pengumuman')}>
+						<Box w={'full'} onClick={() => router.push('/pengumuman')}>
 							<AnnouncementCard key={index} announcement={announcement} />
 						</Box>
 					))}

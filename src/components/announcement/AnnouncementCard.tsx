@@ -55,7 +55,7 @@ export default function AnnouncementCard({ announcement }: { announcement: annou
 				</HStack>
 				<Text fontSize={'sm'}>{content}</Text>
 				<HStack>
-					<Text fontSize={'xs'}>Pak Suhartana</Text>
+					<Text fontSize={'xs'}>{announcement.lecturer.name}</Text>
 					<Avatar size={'2xs'} name='suhartana' src={announcement.lecturer.profile_url} />
 				</HStack>
 			</Stack>

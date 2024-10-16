@@ -5,10 +5,15 @@ import announcement from '@/types/announcement.type';
 import { API_BASE_URL } from '@/utils/constant';
 import { Link } from '@chakra-ui/next-js';
 import { Avatar, Badge, Box, Divider, Flex, Heading, HStack, Icon, Text, VStack } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import { BiFile } from 'react-icons/bi';
 
 export default function AnnouncementBox() {
 	const announcement = useAnnouncementStore((state) => state.selectedAnnouncement);
+
+	useEffect(() => {
+		console.log(announcement);
+	}, []);
 
 	return (
 		<Box flexBasis={'50%'}>
@@ -43,7 +48,7 @@ export default function AnnouncementBox() {
 						<Text marginTop={3}>{announcement.content}</Text>
 						<Box marginTop={3}>
 							{announcement.announcement_medias.map((media, index) => (
-								<HStack>
+								<HStack key={index}>
 									<Icon as={BiFile} />
 									<Link href={API_BASE_URL + media.media_url}>media {index + 1}</Link>
 								</HStack>
