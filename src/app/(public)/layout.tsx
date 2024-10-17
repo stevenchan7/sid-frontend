@@ -6,7 +6,7 @@ export default async function PublicLayout({ children }: { children: React.React
 	return (
 		<Flex flexDirection={'column'} minHeight={'100vh'}>
 			<PublicNavbar />
-			<Box flex={'1'} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+			<Box flex={'1'} display={'flex'} justifyContent={'center'} alignItems={'flex-start'}>
 				{children}
 			</Box>
 			<PublicFooter />

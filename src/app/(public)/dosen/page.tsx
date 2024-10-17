@@ -9,11 +9,11 @@ export default function LecturerPage() {
 	const [search, setSearch] = useState('');
 
 	return (
-		<Container maxWidth={'container.xl'} marginY={20}>
+		<Container maxWidth={'container.2xl'} marginY={20}>
 			<Box>
 				<Heading as={'h1'}>Daftar Dosen Informatika</Heading>
 				<LecturerSearch setSearch={setSearch} />
-				<LecturerTable />
+				<LecturerTable search={search} />
 			</Box>
 		</Container>
 	);
