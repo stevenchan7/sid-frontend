@@ -1,9 +1,9 @@
-import { lecturer } from '@/types/lecturer.type';
+import Lecturer from '@/types/lecturer.type';
 import { create } from 'zustand';
 
 interface LecturerState {
-	lecturers: lecturer[];
-	setLecturers: (data: lecturer[]) => void;
+	lecturers: Lecturer[];
+	setLecturers: (data: Lecturer[]) => void;
 }
 
 export const useLecturerStore = create<LecturerState>((set) => ({

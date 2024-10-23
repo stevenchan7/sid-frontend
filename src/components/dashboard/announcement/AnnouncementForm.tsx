@@ -1,12 +1,11 @@
 'use client';
 
 import { createAnnouncement } from '@/api/announcement.api';
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Text, Textarea, useRadio, useRadioGroup, useToast, VStack } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Text, Textarea, useToast, VStack } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
-import { File } from 'buffer';
-import { Field, FieldInputProps, Form, Formik, FormikBag, FormikErrors } from 'formik';
+import { Field, FieldInputProps, Form, Formik, FormikProps } from 'formik';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useRef } from 'react';
 import * as Yup from 'yup';
 
 function RadioCard({ value, setFieldValue, selected }: { value: string; setFieldValue: any; selected: boolean }) {
@@ -54,16 +53,23 @@ export default function AnnouncementForm() {
 				return true;
 			}),
 	});
-
 	const options = ['penting', 'normal'];
-
 	const toast = useToast();
-	const router = useRouter();
+	const fileInputRef = useRef<HTMLInputElement | null>(null);
+	interface formValues {
+		title: string;
+		priority: string;
+		content: string;
+		medias: [];
+	}
 
 	const mutation = useMutation({
 		mutationFn: (payload: { title: string; content: string; priority: string; medias: any[] }): Promise<string | any> => createAnnouncement(payload),
 		onSuccess: (data) => {
-			router.refresh();
+			if (fileInputRef.current) {
+				fileInputRef.current.value = '';
+			}
+
 			return toast({
 				title: 'Sukses',
 				description: data,
@@ -105,8 +111,8 @@ export default function AnnouncementForm() {
 						<Form>
 							<VStack spacing={4} alignItems={'flex-start'}>
 								<Field name='title'>
-									{({ field, form }: { field: FieldInputProps<string>; form: any }) => (
-										<FormControl isInvalid={form.errors.title && form.touched.title}>
+									{({ field, form }: { field: FieldInputProps<string>; form: FormikProps<formValues> }) => (
+										<FormControl isInvalid={!!(form.errors.title && form.touched.title)}>
 											<FormLabel>Judul Pengumuman</FormLabel>
 											<Input {...field} placeholder='Judul pengumuman' />
 											<FormErrorMessage>{form.errors.title}</FormErrorMessage>
@@ -114,18 +120,23 @@ export default function AnnouncementForm() {
 									)}
 								</Field>
 
-								<Box>
-									<FormLabel>Prioritas</FormLabel>
-									<HStack>
-										{options.map((value) => (
-											<RadioCard key={value} value={value} setFieldValue={props.setFieldValue} selected={props.values.priority === value} />
-										))}
-									</HStack>
-								</Box>
+								<Field name='priority'>
+									{({ form }: { form: FormikProps<formValues> }) => (
+										<FormControl isInvalid={!!(form.errors.priority && form.touched.priority)}>
+											<FormLabel>Prioritas</FormLabel>
+											<HStack>
+												{options.map((value) => (
+													<RadioCard key={value} value={value} setFieldValue={form.setFieldValue} selected={form.values.priority === value} />
+												))}
+											</HStack>
+											<FormErrorMessage>{form.errors.priority}</FormErrorMessage>
+										</FormControl>
+									)}
+								</Field>
 
 								<Field name='content'>
-									{({ field, form }: { field: FieldInputProps<string>; form: any }) => (
-										<FormControl isInvalid={form.errors.content && form.touched.content}>
+									{({ field, form }: { field: FieldInputProps<string>; form: FormikProps<formValues> }) => (
+										<FormControl isInvalid={!!(form.errors.content && form.touched.content)}>
 											<FormLabel>Isi Pengumuman</FormLabel>
 											<Textarea {...field} placeholder='Isi pengumuman' rows={10} />
 											<FormErrorMessage>{form.errors.content}</FormErrorMessage>
@@ -133,14 +144,15 @@ export default function AnnouncementForm() {
 									)}
 								</Field>
 
-								<Field>
-									{({ form }: { form: any }) => (
-										<FormControl isInvalid={form.errors.medias && form.touched.medias}>
+								<Field name='medias'>
+									{({ form }: { form: FormikProps<formValues> }) => (
+										<FormControl isInvalid={!!(form.errors.medias && form.touched.medias)}>
 											<FormLabel>Dokumen Pengumuman</FormLabel>
 											<Input
-												onChange={(e) => props.setFieldValue('medias', e.target.files)}
+												ref={fileInputRef}
+												onChange={(e) => form.setFieldValue('medias', e.target.files)}
 												type='file'
-												// accept='application/pdf'
+												accept='application/pdf'
 												multiple
 												border={'none'}
 												borderRadius={0}
@@ -152,7 +164,7 @@ export default function AnnouncementForm() {
 									)}
 								</Field>
 
-								<Button isLoading={mutation.isPending} type='submit' width={'full'} bg={'primary-blue'} color={'white'}>
+								<Button isDisabled={!props.dirty} isLoading={mutation.isPending} type='submit' width={'full'} bg={'primary-blue'} color={'white'}>
 									Buat Pengumuman
 								</Button>
 							</VStack>

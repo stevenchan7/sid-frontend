@@ -1,5 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { API_BASE_URL } from './constant';
+import { cookies } from 'next/headers';
 
 // Extend AxiosRequestConfig to include _retry property
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -25,7 +26,10 @@ sidAxios.interceptors.response.use(
 			originalRequest._retry = true;
 
 			try {
-				await refreshTokenAxios.get('/api/public/generate-access-token', { withCredentials: true });
+				const res = await refreshTokenAxios.get('/api/public/generate-access-token', { withCredentials: true });
+
+				// Set cookie for new access token
+				// Later
 
 				return sidAxios(originalRequest);
 			} catch (error) {

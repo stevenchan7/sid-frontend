@@ -2,17 +2,17 @@
 
 import { getLecturer } from '@/api/lecturer.api';
 import { useLecturerStore } from '@/stores/lecturer.store';
-import { lecturer } from '@/types/lecturer.type';
 import { Link } from '@chakra-ui/next-js';
 import { Avatar, AvatarBadge, Box, Button, Center, Flex, HStack, Skeleton, Text } from '@chakra-ui/react';
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import LecturerTablePagination from './LecturerTablePagination';
+import Lecturer from '@/types/lecturer.type';
 
 export default function LecturerTable({ search }: { search: string }) {
 	const { lecturers, setLecturers } = useLecturerStore();
-	const [filteredLecturers, setfilteredLecturers] = useState<lecturer[]>([]);
+	const [filteredLecturers, setfilteredLecturers] = useState<Lecturer[]>([]);
 	const [page, setPage] = useState(1);
 	const limit = 10;
 	const offset = (page - 1) * limit;

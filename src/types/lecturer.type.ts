@@ -1,4 +1,4 @@
-export interface lecturer {
+export default interface Lecturer {
 	id: number;
 	nidn: string;
 	nip: string;

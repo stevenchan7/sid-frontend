@@ -13,7 +13,7 @@ export default function DashboardAnnouncementHome() {
 	const page = 1;
 	const limit = 2;
 	const priority = 'penting';
-	const { data, isPending, isError } = useQuery({
+	const { data, isPending } = useQuery({
 		queryKey: ['announcements', 'dashboard', 'home'],
 		queryFn: () => getAnnouncement({ page, limit, priority }),
 	});
@@ -43,7 +43,7 @@ export default function DashboardAnnouncementHome() {
 				{data && data.length > 0 && (
 					<VStack spacing={6}>
 						{data.map((dat, index) => (
-							<Box w={'full'} onClick={() => router.push('/pengumuman')}>
+							<Box key={index} w={'full'} onClick={() => router.push('/pengumuman')}>
 								<AnnouncementCard key={index} announcement={dat} />
 							</Box>
 						))}

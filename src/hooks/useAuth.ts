@@ -15,7 +15,7 @@ interface lecturer {
 }
 
 const useAuth = () => {
-	const [user, setUser] = useState<null | lecturer>(null);
+	const [user, setUser] = useState<null | { name: string; role: 'user' | 'admin' }>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<null | any>(null);
 

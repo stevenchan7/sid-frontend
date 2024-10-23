@@ -1,4 +1,4 @@
-export default interface announcement {
+export default interface Announcement {
 	id: string;
 	title: string;
 	content: string;

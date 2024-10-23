@@ -1,14 +1,14 @@
-import announcement from '@/types/announcement.type';
+import Announcement from '@/types/announcement.type';
 import { create } from 'zustand';
 
 interface AnnouncementState {
 	search: string;
-	announcements: announcement[];
-	selectedAnnouncement: announcement | null;
-	setAnnouncements: (data: announcement[]) => void;
-	setAnnouncementsPaginate: (data: announcement[]) => void;
+	announcements: Announcement[];
+	selectedAnnouncement: Announcement | null;
+	setAnnouncements: (data: Announcement[]) => void;
+	setAnnouncementsPaginate: (data: Announcement[]) => void;
 	setSearch: (data: string) => void;
-	setSelectedAnnouncement: (data: announcement) => void;
+	setSelectedAnnouncement: (data: Announcement) => void;
 }
 
 export const useAnnouncementStore = create<AnnouncementState>()((set, get) => ({

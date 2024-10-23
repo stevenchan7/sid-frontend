@@ -1,15 +1,12 @@
 'use client';
 
 import { Link } from '@chakra-ui/next-js';
-import { Box, Button, Heading, HStack, Icon, Image, Text, textDecoration, Tooltip, useDisclosure, VStack } from '@chakra-ui/react';
+import { Box, Heading, HStack, Icon, Image, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
 import { IconType } from 'react-icons';
-import { FiVolume, FiVolume2 } from 'react-icons/fi';
-import { GoChecklist } from 'react-icons/go';
-import { LuArrowLeftCircle, LuArrowRightCircle, LuBookMinus, LuHome, LuLayoutDashboard, LuLayoutList, LuLogOut, LuUserCircle } from 'react-icons/lu';
-import { MdOutlineDashboard } from 'react-icons/md';
+import { FiVolume2 } from 'react-icons/fi';
+import { LuArrowLeftCircle, LuArrowRightCircle, LuBookMinus, LuHome, LuLayoutDashboard, LuLayoutList, LuLibrary, LuLogOut, LuUserCircle } from 'react-icons/lu';
 import DashboardLogout from './DashboardLogout';
-import { useEffect } from 'react';
 
 function MenuItem({ title, url, icon, isActive, isOpen }: { title: string; url: string; icon: IconType; isActive: boolean; isOpen: boolean }) {
 	return (
@@ -49,6 +46,11 @@ const menuItems = [
 				icon: LuBookMinus,
 			},
 			{
+				title: 'Jadwal Piket',
+				url: '/dashboard/piket',
+				icon: LuLibrary,
+			},
+			{
 				title: 'Public Area',
 				url: '/',
 				icon: LuHome,
@@ -67,13 +69,9 @@ const menuItems = [
 	},
 ];
 
-export default function DashboardSidebar() {
+export default function DashboardSidebar({ role }: { role: 'user' | 'admin' }) {
 	const path = usePathname();
 	const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true });
-
-	useEffect(() => {
-		console.log(isOpen);
-	}, [isOpen]);
 
 	return (
 		<Box position={'sticky'} top={0} left={0} w={isOpen ? '2xs' : '5rem'} height={'100vh'} bg={'navy'} zIndex={'sticky'}>
@@ -87,9 +85,12 @@ export default function DashboardSidebar() {
 							{menu.title}
 						</Heading>
 						<VStack alignItems={'flex-start'} marginTop={6} spacing={6}>
-							{menu.items.map((item, index) => (
-								<MenuItem key={index} title={item.title} url={item.url} icon={item.icon} isActive={path.startsWith(item.url) && item.url !== '/'} isOpen={isOpen} />
-							))}
+							{menu.items.map((item, index) => {
+								if (item.title === 'Jadwal Piket' && role !== 'admin') {
+									return;
+								}
+								return <MenuItem key={index} title={item.title} url={item.url} icon={item.icon} isActive={path.startsWith(item.url) && item.url !== '/'} isOpen={isOpen} />;
+							})}
 						</VStack>
 					</Box>
 				))}

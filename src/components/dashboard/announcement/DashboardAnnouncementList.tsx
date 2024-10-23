@@ -83,9 +83,8 @@ export default function DashboardAnnouncementList() {
 						>
 							<VStack p={2} spacing={6} overflow={'visible'}>
 								{announcements.map((announcement, index) => {
-									console.log(announcement);
 									return (
-										<Box width={'full'} onClick={() => router.push('/pengumuman')}>
+										<Box key={index} width={'full'} onClick={() => router.push('/pengumuman')}>
 											<AnnouncementCard key={index} announcement={announcement} />
 										</Box>
 									);

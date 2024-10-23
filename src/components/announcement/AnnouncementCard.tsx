@@ -14,7 +14,7 @@ export default function AnnouncementCard({ announcement }: { announcement: annou
 
 		if (contentArr.length > 15) {
 			contentArr = contentArr.slice(0, 15);
-			setContent(contentArr.join(' '));
+			setContent(contentArr.join(' ') + '...');
 			return;
 		}
 
