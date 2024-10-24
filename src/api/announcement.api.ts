@@ -15,8 +15,6 @@ export const getAnnouncement = async ({ page, limit, title, priority }: { page: 
 			},
 		});
 
-		sleep();
-
 		return res.data.data;
 	} catch (error) {
 		handleError(error);
@@ -61,6 +59,8 @@ export const getAnnouncementUser = async ({ page, limit }: { page: number; limit
 			},
 			withCredentials: true,
 		});
+
+		sleep();
 
 		return res.data.data;
 	} catch (error) {
