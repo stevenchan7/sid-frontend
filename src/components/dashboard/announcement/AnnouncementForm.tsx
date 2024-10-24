@@ -2,7 +2,7 @@
 
 import { createAnnouncement } from '@/api/announcement.api';
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Text, Textarea, useToast, VStack } from '@chakra-ui/react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Field, FieldInputProps, Form, Formik, FormikProps } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useRef } from 'react';
@@ -62,10 +62,14 @@ export default function AnnouncementForm() {
 		content: string;
 		medias: [];
 	}
+	const queryClient = useQueryClient();
 
 	const mutation = useMutation({
 		mutationFn: (payload: { title: string; content: string; priority: string; medias: any[] }): Promise<string | any> => createAnnouncement(payload),
 		onSuccess: (data) => {
+			// Invalidate announcement queries
+			queryClient.invalidateQueries({ queryKey: ['announcements'] });
+
 			if (fileInputRef.current) {
 				fileInputRef.current.value = '';
 			}

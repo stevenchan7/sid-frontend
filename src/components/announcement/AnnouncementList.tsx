@@ -15,7 +15,7 @@ export default function AnnouncementList() {
 	const setAnnouncementsPaginate = useAnnouncementStore((state) => state.setAnnouncementsPaginate);
 	const search = useAnnouncementStore((state) => state.search);
 	const [page, setPage] = useState(1);
-	const limit = 6;
+	const limit = 20;
 	const [hasMore, setHasMore] = useState(true);
 
 	function onNext() {
