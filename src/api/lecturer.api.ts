@@ -25,11 +25,26 @@ export const getLecturerById = async (id: number) => {
   }
 };
 
-export const updateLecturer = async () => {
+export const updateLecturer = async ({ id, name, phoneNumber, address, avatar }: { id: number | string; name: string; phoneNumber: string; address: string; avatar: string }) => {
   try {
-    const res = await sidAxios.post('/api/user/lecturers/update');
+    const formData = new FormData();
+    formData.append('id', id.toString());
+    formData.append('name', name);
+    formData.append('phoneNumber', phoneNumber);
+    formData.append('address', address);
 
-    return res.data.data;
+    if (avatar) {
+      formData.append('avatar', avatar);
+    }
+
+    const res = await sidAxios.post('/api/user/lecturers/update', formData, {
+      withCredentials: true,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return res.data.message;
   } catch (error) {
     handleError(error);
   }

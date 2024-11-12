@@ -3,10 +3,11 @@
 import { getLecturerById, updateLecturer } from '@/api/lecturer.api';
 import useAuth from '@/hooks/useAuth';
 import Lecturer from '@/types/lecturer.type';
-import { Avatar, Box, Button, Container, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, useToast, VStack } from '@chakra-ui/react';
+import { API_BASE_URL } from '@/utils/constant';
+import { Avatar, Box, Button, Container, Flex, FormControl, FormErrorMessage, FormLabel, Heading, HStack, Input, Text, useToast, VStack } from '@chakra-ui/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Formik, Form, Field, FieldInputProps, FormikProps } from 'formik';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import * as Yup from 'yup';
 
 export default function DashboardProfilePage() {
@@ -43,6 +44,8 @@ export default function DashboardProfilePage() {
     phoneNumber: string;
     address: string;
   }
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
 
   const { data } = useQuery({
     queryKey: ['lecturers', { id: user && user.id }],
@@ -55,9 +58,47 @@ export default function DashboardProfilePage() {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (lecturer) {
+      setPreviewUrl(API_BASE_URL + lecturer.profile_url);
+    }
+  }, [lecturer]);
+
   const mutation = useMutation({
-    mutationFn: () => updateLecturer(),
+    mutationFn: ({ id, name, phoneNumber, address, avatar }: { id: number | string; name: string; phoneNumber: string; address: string; avatar: string }) =>
+      updateLecturer({ id, name, phoneNumber, address, avatar }),
+    onSuccess: () => {
+      return toast({
+        title: 'Sukses',
+        description: 'Berhasil update data',
+        status: 'success',
+        duration: 5000,
+        position: 'top',
+      });
+    },
+    onError: (error) => {
+      return toast({
+        title: 'Gagal',
+        description: error.message,
+        status: 'error',
+        duration: 5000,
+        position: 'top',
+      });
+    },
   });
+
+  function fileInputChangeHandler(e: ChangeEvent<HTMLInputElement>, form: FormikProps<formValues>) {
+    const file = e.currentTarget.files ? e.currentTarget.files[0] : null;
+    form.setFieldValue('avatar', file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string); // Set preview URL for Avatar
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
   if (lecturer)
     return (
@@ -66,34 +107,45 @@ export default function DashboardProfilePage() {
           <Heading size={'2xl'}>Profil</Heading>
         </Box>
         <Container maxW='container.xl' marginTop={8}>
-          <Flex flexDirection={{ base: 'column', lg: 'row' }} justifyContent={'center'} gap={12}>
-            <Box>
-              <Avatar src={lecturer.profile_url} name={lecturer.name} size={'2xl'} boxSize={'10rem'} borderRadius={'lg'} />
-            </Box>
-            <Box flexBasis={'50%'}>
-              <Formik
-                initialValues={{ avatar: '', id: lecturer.id, name: lecturer.name, phoneNumber: lecturer.phone_number, address: lecturer.address }}
-                validationSchema={formValidationSchema}
-                onSubmit={(values) => console.log(values)}
-              >
-                {(props) => (
-                  <Form>
+          <Formik
+            initialValues={{ avatar: '', id: lecturer.id, name: lecturer.name, phoneNumber: lecturer.phone_number, address: lecturer.address }}
+            validationSchema={formValidationSchema}
+            onSubmit={(values) => mutation.mutate(values)}
+          >
+            {(props) => (
+              <Form>
+                <Flex flexDirection={{ base: 'column', lg: 'row' }} justifyContent={'center'} gap={12}>
+                  <VStack>
+                    <Box pos={'relative'}>
+                      <Avatar src={previewUrl} name={lecturer.name} size={'2xl'} boxSize={'10rem'} borderRadius={'lg'} />
+
+                      {/* File input button */}
+                      <Button
+                        pos={'absolute'}
+                        left={0}
+                        right={0}
+                        bottom={0}
+                        h={'20%'}
+                        bg={'rgba(0, 0, 0, 0.5)'}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                        _hover={{ bg: 'black' }}
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <Text color={'white'}>Pilih</Text>
+                      </Button>
+                    </Box>
                     <Field name='avatar'>
                       {({ form }: { form: FormikProps<formValues> }) => (
                         <FormControl isInvalid={!!(form.errors.avatar && form.touched.avatar)}>
-                          <Input
-                            type='file'
-                            accept='image/png, image/jpeg'
-                            onChange={(e) => {
-                              const file = e.currentTarget.files ? e.currentTarget.files[0] : null;
-                              form.setFieldValue('avatar', file);
-                            }}
-                          />
+                          <Input ref={fileInputRef} display={'none'} type='file' accept='image/png, image/jpeg' onChange={(e) => fileInputChangeHandler(e, form)} />
                           <FormErrorMessage>{form.errors.avatar}</FormErrorMessage>
                         </FormControl>
                       )}
                     </Field>
-
+                  </VStack>
+                  <Box flexBasis={'50%'}>
                     <VStack spacing={6}>
                       <Field name='name'>
                         {({ field, form }: { field: FieldInputProps<string>; form: FormikProps<formValues> }) => (
@@ -148,11 +200,11 @@ export default function DashboardProfilePage() {
                         Simpan
                       </Button>
                     </VStack>
-                  </Form>
-                )}
-              </Formik>
-            </Box>
-          </Flex>
+                  </Box>
+                </Flex>
+              </Form>
+            )}
+          </Formik>
         </Container>
       </Box>
     );
