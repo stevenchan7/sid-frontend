@@ -12,6 +12,7 @@ export default function LecturerTablePagination({ totalPage, page, setPage }: { 
 					<HStack>
 						{Array.from({ length: totalPage }).map((_, index) => (
 							<Square
+								key={index}
 								onClick={() => setPage(index + 1)}
 								cursor={'pointer'}
 								size={'2.5rem'}

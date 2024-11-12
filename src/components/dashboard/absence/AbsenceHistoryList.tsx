@@ -18,7 +18,7 @@ export default function AbsenceHistoryList() {
 			</Box>
 			<VStack>
 				{absenceHistory.map((absence) => (
-					<Box w={'full'} borderRadius={'lg'} padding={6} boxShadow={'lg'}>
+					<Box key={absence.id} w={'full'} borderRadius={'lg'} padding={6} boxShadow={'lg'}>
 						<Heading as={'h3'} size={'md'}>
 							{dayjs(absence.createdAt).format('dddd, D MMM YYYY')}
 						</Heading>

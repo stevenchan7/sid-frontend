@@ -23,3 +23,15 @@ export const createSchedule = async ({ lecturerId, lectureId, day, startTime, en
 		handleError(error);
 	}
 };
+
+export const getSchedules = async () => {
+	try {
+		const res = await sidAxios.get('/api/public/schedules');
+
+		console.log(res);
+
+		return res.data.data;
+	} catch (error) {
+		handleError(error);
+	}
+};

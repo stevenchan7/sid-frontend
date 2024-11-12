@@ -30,7 +30,7 @@ export default function CreateSchedulePage() {
 		mutationFn: (formValues: CreateScheduleFormValues) => createSchedule(formValues),
 		onSuccess: () => {
 			return toast({
-				title: 'Berhasil menambah jadwal',
+				title: 'Berhasil menambah jadwal mengajar',
 				status: 'success',
 				duration: 5000,
 				position: 'top',

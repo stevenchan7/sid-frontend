@@ -2,7 +2,6 @@ import announcement from '@/types/announcement.type';
 import handleError from '@/utils/apiErrorHandler';
 import { sidAxios } from '@/utils/axios';
 import { sleep } from '@/utils/sleep';
-import { json } from 'stream/consumers';
 
 export const getAnnouncement = async ({ page, limit, title, priority }: { page: number; limit: number; title?: string; priority?: 'normal' | 'penting' }): Promise<announcement[]> => {
 	try {
@@ -33,8 +32,6 @@ export const createAnnouncement = async ({ title, content, priority, medias }: {
 			formData.append('medias', medias[i]);
 		}
 	}
-
-	console.log('form data', formData);
 
 	try {
 		const res = await sidAxios.post('/api/user/announcements', formData, {

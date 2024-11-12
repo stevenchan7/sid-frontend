@@ -62,7 +62,7 @@ const menuItems = [
 		items: [
 			{
 				title: 'Profil',
-				url: '/profil',
+				url: '/dashboard/profil',
 				icon: LuUserCircle,
 			},
 		],
@@ -84,7 +84,7 @@ export default function DashboardSidebar({ role }: { role: 'user' | 'admin' }) {
 						<Heading as={'h6'} size={'sm'} fontWeight={'700'} marginTop={12} marginX={isOpen ? 3 : 2} textAlign={isOpen ? 'start' : 'center'}>
 							{menu.title}
 						</Heading>
-						<VStack alignItems={'flex-start'} marginTop={6} spacing={6}>
+						<VStack alignItems={'flex-start'} marginTop={6} spacing={6} height={menu.title === 'Main Menu' ? '36vh' : ''} overflowY='auto'>
 							{menu.items.map((item, index) => {
 								if (item.title === 'Jadwal Piket' && role !== 'admin') {
 									return;

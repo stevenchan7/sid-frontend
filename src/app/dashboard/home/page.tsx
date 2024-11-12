@@ -1,6 +1,7 @@
 'use client';
 
 import DashboardAnnouncementHome from '@/components/dashboard/home/DashboardAnnouncementHome';
+import DashboardHomePicket from '@/components/dashboard/home/DashboardHomePicket';
 import { Avatar, AvatarBadge, Box, Button, Container, Flex, Heading, HStack, Icon, Stack, Text, VStack } from '@chakra-ui/react';
 import { MdOutlineLibraryBooks, MdOutlineLocationOn } from 'react-icons/md';
 
@@ -11,7 +12,7 @@ export default function DashboardHome() {
 				<Heading size={'2xl'}>Dashboard</Heading>
 			</Box>
 			<Container maxW={'container.xl'} marginTop={8}>
-				<Flex>
+				<Flex flexDirection={'row'} gap={8}>
 					<VStack flexBasis={'50%'}>
 						{/* Status anda box */}
 						<Box w={'full'} padding={8} borderRadius={'lg'} boxShadow={'lg'}>
@@ -53,6 +54,8 @@ export default function DashboardHome() {
 
 						<DashboardAnnouncementHome />
 					</VStack>
+
+					<DashboardHomePicket />
 				</Flex>
 			</Container>
 		</Box>

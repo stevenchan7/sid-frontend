@@ -32,7 +32,7 @@ export default function AnnouncementForm() {
 		priority: Yup.string().required('Required'),
 		content: Yup.string().required('Required'),
 		medias: Yup.mixed<FileList>()
-			.test('fileType', 'Only accept pdf files', (files) => {
+			.test('fileType', 'Format file harus .pdf', (files) => {
 				if (files) {
 					for (let i = 0; i < files.length; i++) {
 						if (files[i].type !== 'application/pdf') {
@@ -42,7 +42,7 @@ export default function AnnouncementForm() {
 				}
 				return true;
 			})
-			.test('fileSize', 'Maks 1mb setiap file', (files) => {
+			.test('fileSize', 'Maks 1 mb setiap file', (files) => {
 				if (files) {
 					for (let i = 0; i < files.length; i++) {
 						if (files[i].size > 512000) {
