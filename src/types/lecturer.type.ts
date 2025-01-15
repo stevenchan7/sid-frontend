@@ -1,3 +1,5 @@
+import Absence from './absence.type';
+
 export default interface Lecturer {
   id: number;
   nidn: string;
@@ -7,4 +9,5 @@ export default interface Lecturer {
   phone_number: string;
   email: string;
   address: string;
+  absences: Absence[];
 }
