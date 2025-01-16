@@ -60,7 +60,7 @@ export default function DashboardProfilePage() {
 
   useEffect(() => {
     if (lecturer) {
-      setPreviewUrl(API_BASE_URL + lecturer.profile_url);
+      setPreviewUrl(lecturer.profile_url);
     }
   }, [lecturer]);
 

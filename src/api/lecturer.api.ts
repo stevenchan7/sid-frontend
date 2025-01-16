@@ -1,5 +1,7 @@
+import Lecturer from '@/types/lecturer.type';
 import handleError from '@/utils/apiErrorHandler';
 import { sidAxios } from '@/utils/axios';
+import { AxiosResponse } from 'axios';
 
 export const getLecturer = async () => {
   try {
@@ -15,7 +17,8 @@ export const getLecturer = async () => {
 
 export const getLecturerById = async (id: number) => {
   try {
-    const res = await sidAxios.get(`/api/public/lecturers/${id}`);
+    const res: AxiosResponse<{ data: { lecturer: Lecturer } }> = await sidAxios.get(`/api/public/lecturers/${id}`);
+
     const {
       data: { lecturer },
     } = res.data;

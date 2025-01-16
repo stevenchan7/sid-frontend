@@ -6,7 +6,7 @@ export default function PicketCard({ lecturer }: { lecturer: Lecturer }) {
   return (
     <Box bg={'white'} borderRadius={'lg'} w={'full'} p={2} boxShadow={'base'}>
       <HStack spacing={4}>
-        <Avatar name='Suhartana' src=''>
+        <Avatar name={lecturer.name} src={lecturer.profile_url}>
           <AvatarBadge boxSize='1em' bg='green.500' />
         </Avatar>
 

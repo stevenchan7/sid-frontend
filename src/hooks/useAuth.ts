@@ -1,8 +1,15 @@
+import Absence from '@/types/absence.type';
 import { sidAxios } from '@/utils/axios';
 import { useState, useEffect } from 'react';
 
 const useAuth = () => {
-  const [user, setUser] = useState<null | { id: number; name: string; role: 'user' | 'admin' }>(null);
+  const [user, setUser] = useState<null | {
+    id: number;
+    name: string;
+    profileUrl: string;
+    role: 'user' | 'admin';
+    absence: Absence;
+  }>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | any>(null);
 
